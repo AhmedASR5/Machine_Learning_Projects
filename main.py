@@ -144,33 +144,38 @@ plt.show()
 
 
 # Prepare data
-X_train = train_data[['x1', 'x2']]
+X_train = train_data[['x1', 'x2']] # same as before
 y_train = train_data['y']
 X_val = validation_data[['x1', 'x2']]
 y_val = validation_data['y']
 
 # Polynomial degree
-degree = 8
+degree = 8 # choosing degree according to assignment part.
 
 # Generate polynomial features
-poly = PolynomialFeatures(degree)
-X_train_poly = poly.fit_transform(X_train)
-X_val_poly = poly.transform(X_val)
+feature_degree_function = PolynomialFeatures(degree)
+X_train_poly = feature_degree_function.fit_transform(X_train)
+X_val_poly = feature_degree_function.transform(X_val)
 
 # Set of alpha values to try
-alphas = [0.001, 0.005, 0.01, 0.1, 10]
-val_errors = []
+alphas = [0.001, 0.005, 0.01, 0.1, 10] # defining the alpha values according to assignment part.
 
-# Iterate over different alpha values
+val_errors = [] # list to save the validation error of each alpha to plot it later.
+
+# for loop to iterate over the alphas
+
 for alpha in alphas:
-    # Fit a Ridge regression model
-    model = Ridge(alpha=alpha)
-    model.fit(X_train_poly, y_train)
 
-    # Predict and evaluate on the validation set
-    y_val_pred = model.predict(X_val_poly)
-    val_error = mean_squared_error(y_val, y_val_pred)
-    val_errors.append(val_error)
+    model = Ridge(alpha=alpha) # creating the model of ridge regression with the alpha value.
+
+    model.fit(X_train_poly, y_train) # here i will substitute the data in the model to train it.
+
+
+    y_val_pred = model.predict(X_val_poly) # getting the predicted values of the validation data.
+
+    val_error = mean_squared_error(y_val, y_val_pred) # computing the mean squared error of the validation data.
+
+    val_errors.append(val_error) # adding the error to the list to plot it later.
 
 # Plot validation MSE vs alpha
 plt.figure(figsize=(10, 6))
@@ -194,7 +199,7 @@ plt.show()
 # part 4 start:
 
 
-# loading the data from the csv file. 1200105
+# loading the data from the csv file.
 
 train_data = pd.read_csv('train_cls.csv')  # train data that we will use it to make logistic model
 test_data = pd.read_csv('test_cls.csv')  # data that we will use to test the model
@@ -277,7 +282,7 @@ y_max = X_train['x2'].max() + 1 # same
 
 xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02), np.arange(y_min, y_max, 0.02))
 
-# Create mesh grid for plotting
+# make the mesh grid with the quadratic features.
 grid = np.c_[xx.ravel(), yy.ravel()]
 grid_poly = features_degree.transform(grid)
 Z_quad = model_quad.predict(grid_poly)
